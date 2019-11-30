@@ -1,7 +1,7 @@
 import csv
 
 ## Variables  EDIT these to suit your needs
-incomingFile = "square_example.csv" ## your file from square
+incomingFile = "square.csv" ## your file from square
 outFile = "square_ready.csv" ## your outgoing file... note ALWAYS KEEP A BACKUP OF YOUR ORIGINAL FILE
 
 ## Income information
@@ -10,7 +10,7 @@ salesAccount = "Income:Photographic Service Income" # Your income account in GNU
 
 ## Transfer information
 transferDescription ="Square transfer to bank account" # The decription for your square transfers to your bank
-bankAccount = "Assets:Current Assets:yourbank" # Your bank account setup in GNUCash
+bankAccount = "Assets:Current Assets:YOURBANK" # Your bank account setup in GNUCash
 
 ## Square 
 squareHoldingAccount = "Assets:Current Assets:Square Holding Account" # Your square holding account in GNUCash
@@ -29,12 +29,13 @@ with open(incomingFile,'r') as csv_file:
 
 		csv_writer = csv.writer(new_file)
 
-		csv_writer.writerow(["Date", "Gross Sales", "Fees", "Net Total", "Description", "Account"])
+		csv_writer.writerow(["Date", "Gross Sales", "Withdraw", "Description", "Account"])
 
 		for row in csv_reader:
-			csv_writer.writerow([row['Date'], row['Gross Sales'], '', '', incomeDescription, salesAccount])
-			csv_writer.writerow([row['Date'], '', '', row['Net Total'], transferDescription, bankAccount])
-			csv_writer.writerow([row['Date'], '', row['Fees'],'', squaredescription, squareExpenseAccount])
+			stripped = row['Fees'].strip('$()')
+			csv_writer.writerow([row['Date'], row['Gross Sales'], '', incomeDescription, salesAccount])
+			csv_writer.writerow([row['Date'], '', row['Net Total'], transferDescription, bankAccount])
+			csv_writer.writerow([row['Date'], '', stripped, squaredescription, squareExpenseAccount])
 
 
 
